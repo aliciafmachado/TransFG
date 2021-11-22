@@ -82,6 +82,8 @@ def setup(args):
         num_classes = 120
     elif args.dataset == "INat2017":
         num_classes = 5089
+    elif args.dataset == "mva_recvis":
+        num_classes = 20
 
     model = VisionTransformer(config, args.img_size, zero_head=True, num_classes=num_classes,                                                   smoothing_value=args.smoothing_value)
 
@@ -362,7 +364,10 @@ def main():
 
     # if args.fp16 and args.smoothing_value != 0:
     #     raise NotImplementedError("label smoothing not supported for fp16 training now")
-    args.data_root = '{}/{}'.format(args.data_root, args.dataset)
+    if args.data_root == None:
+        args.data_root = '{}'.format(args.dataset)    
+    else:
+        args.data_root = '{}/{}'.format(args.data_root, args.dataset)
     # Setup CUDA, GPU & distributed training
     if args.local_rank == -1:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
